@@ -1,0 +1,46 @@
+<%@ page language = "java" contentType = 
+"text/html; charset = ISO-8859-1"
+import = "java.io.*"
+import = "java.sql.*"
+import = "java.util.*"
+import = "javax.sql.*"
+import = "java.sql.ResultSet"
+import = "java.sql.Statement"
+import = "java.sql.Connection"
+import = "java.sql.DriverManager"
+import = "java.sql.SQLException"
+%>
+<%@page import="datacon.DatabaseCon"%>
+<%
+
+PreparedStatement ps = null;
+ResultSet rs = null;
+Statement stmt = null;
+String track = request.getParameter("track");
+String date = request.getParameter("date");
+String upd=" "+date+" : "+track+"  \n ";
+String idd = request.getParameter("id");
+
+Integer id = Integer.valueOf(idd);
+
+%>
+<html>
+<head>
+  <title>Updating Database</title>
+</head>
+<body>
+  <%
+  
+  DatabaseCon details = new DatabaseCon();
+  Connection con = details.getConn();
+  ps = con.prepareStatement("update booking set detail=CONCAT(?,detail) where booking_id = ? ");
+  
+  ps.setInt(2, id);
+  ps.setString(1,upd);
+  ps.executeUpdate();
+  response.sendRedirect(request.getHeader("referer"));
+  
+  
+  %>
+</body>
+</html>
